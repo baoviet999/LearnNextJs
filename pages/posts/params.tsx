@@ -26,7 +26,7 @@ const ParamCache = ({ posts }: Props) => {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    context.res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate')
+    context.res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate=5')
     await new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({ name: 'nguyen bao viet', age: 21 })
