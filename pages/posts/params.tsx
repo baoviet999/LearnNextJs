@@ -2,10 +2,10 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import React, { useEffect, useState } from 'react'
 
 type Props = {
-    data: any
+    posts: any
 }
 
-const ParamCache = ({ data }: Props) => {
+const ParamCache = ({ posts }: Props) => {
     const [time, setTime] = useState(0)
     useEffect(() => {
         const timer = setInterval(() => {
@@ -19,22 +19,26 @@ const ParamCache = ({ data }: Props) => {
     return (
         <div>
             <p>{time}</p>
-            <h1>{data?.name}</h1>
-            <h1>{data?.age}</h1>
+            <h1>{posts?.title}</h1>
+            <h1>{posts?.id}</h1>
         </div>
     )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     context.res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate')
-    const data = await new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({ name: 'nguyen bao viet', age: 21 })
         }, 3000)
     })
+
+    const response = await fetch('https://js-post-api.herokuapp.com/api/posts/sktwi1cgkkuif36dj')
+    const data = await response.json()
+
     return {
         props: {
-            data,
+            posts: data,
         },
     }
 }
